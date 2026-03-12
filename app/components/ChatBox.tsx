@@ -104,14 +104,14 @@ export default function ChatBox() {
   return (
     <div className="flex flex-col h-full bg-white/5 backdrop-blur-sm">
       {/* Header Bar */}
-      <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/10 bg-black/20">
+      <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/10 bg-black/40 backdrop-blur-md">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-xs md:text-sm font-medium text-white/90">AgriMate Online</span>
+          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+          <span className="text-sm md:text-base font-semibold text-white tracking-wide">AgriMate Online</span>
         </div>
         <button 
           onClick={newChat} 
-          className="px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium text-white transition-all rounded-full bg-white/10 hover:bg-emerald-500/20 active:scale-95 border border-white/5 hover:border-emerald-500/20"
+          className="px-4 py-1.5 md:px-5 md:py-2 text-xs md:text-sm font-semibold text-white transition-all rounded-full bg-white/10 hover:bg-emerald-500/20 active:scale-95 border border-white/10 hover:border-emerald-500/40"
         >
           New Chat
         </button>
@@ -146,12 +146,12 @@ export default function ChatBox() {
             </div>
           </div>
         ) : chat.length === 0 ? (
-           <div className="flex flex-col items-center justify-center h-full text-center opacity-70 animate-fade-in-up px-4">
-              <div className="w-12 h-12 md:w-16 md:h-16 mb-4 rounded-xl bg-gradient-to-tr from-emerald-500/20 to-yellow-500/20 flex items-center justify-center border border-emerald-500/20">
+           <div className="flex flex-col items-center justify-center h-full text-center animate-fade-in-up px-4">
+              <div className="w-12 h-12 md:w-16 md:h-16 mb-4 rounded-xl bg-gradient-to-tr from-emerald-500/30 to-yellow-500/30 flex items-center justify-center border border-emerald-500/40 shadow-lg shadow-emerald-500/10">
                  <svg className="w-6 h-6 md:w-8 md:h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
               </div>
-              <p className="text-base md:text-lg font-medium text-white">How can I help boost your farm's yield?</p>
-              <p className="text-xs md:text-sm text-white/50 mt-1 max-w-[200px] md:max-w-[280px]">Ask questions about crop diseases, pest control, or weather forecasting to get started.</p>
+              <p className="text-lg md:text-xl font-semibold text-white tracking-tight">How can I help boost your farm's yield?</p>
+              <p className="text-sm md:text-base text-gray-300 mt-2 max-w-[200px] md:max-w-[320px] font-medium leading-relaxed">Ask questions about crop diseases, pest control, or weather forecasting to get started.</p>
            </div>
         ) : (
           chat.map((msg, index) => (

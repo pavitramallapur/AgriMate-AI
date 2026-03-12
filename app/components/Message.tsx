@@ -17,10 +17,10 @@ export default function Message({ role, text, image }: Props) {
       )}
       
       <div 
-        className={`relative max-w-[85%] sm:max-w-[75%] px-3 py-2 md:px-4 md:py-3 text-sm md:text-base leading-relaxed break-words shadow-sm flex flex-col gap-2
+        className={`relative max-w-[85%] sm:max-w-[75%] px-3 py-2 md:px-4 md:py-3 text-sm md:text-base leading-relaxed break-words shadow-sm flex flex-col gap-2 font-medium
           ${isUser 
             ? "bg-gradient-to-br from-emerald-500 to-green-600 text-white rounded-2xl rounded-tr-sm" 
-            : "bg-white/10 text-white/90 backdrop-blur-md border border-white/5 rounded-2xl rounded-tl-sm hover:bg-white/15 transition-colors"
+            : "bg-white/10 text-white backdrop-blur-md border border-white/10 rounded-2xl rounded-tl-sm hover:bg-white/15 transition-colors"
           }`}
       >
         {image && (
