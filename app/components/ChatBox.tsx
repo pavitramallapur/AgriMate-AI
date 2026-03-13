@@ -20,6 +20,48 @@ export default function ChatBox() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
+  const compressImage = (dataUrl: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(dataUrl);
+          return;
+        }
+
+        // Set max dimensions
+        const MAX_WIDTH = 1024;
+        const MAX_HEIGHT = 1024;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Compress with reduced quality (0.7)
+        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7);
+        resolve(compressedDataUrl);
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    });
+  };
+
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -52,8 +94,10 @@ export default function ChatBox() {
         canvasRef.current.height = videoRef.current.videoHeight;
         context.drawImage(videoRef.current, 0, 0);
         const imageDataUrl = canvasRef.current.toDataURL('image/jpeg');
-        setSelectedImage(imageDataUrl);
-        stopCamera();
+        compressImage(imageDataUrl).then(compressed => {
+          setSelectedImage(compressed);
+          stopCamera();
+        });
       }
     }
   };
@@ -76,7 +120,11 @@ export default function ChatBox() {
 
       const data = await res.json();
 
-      const aiMsg: ChatMessage = { role: "ai", text: data.reply };
+      const aiMsg: ChatMessage = { 
+        role: "ai", 
+        text: data.reply,
+        image: data.displayImage || undefined
+      };
 
       setChat((prev) => [...prev, aiMsg]);
     } catch (error) {
@@ -94,8 +142,9 @@ export default function ChatBox() {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result as string);
+      reader.onloadend = async () => {
+        const compressed = await compressImage(reader.result as string);
+        setSelectedImage(compressed);
       };
       reader.readAsDataURL(file);
     }
